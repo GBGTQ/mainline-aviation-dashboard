@@ -6,8 +6,7 @@
 <title>Financing - Mainline Aviation</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0e1a;color:#e8eef5;padding:24px;}
+*{box-sizing:border-box;margin:0;padding:0;}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0e1a;color:#e8eef5;padding:24px;}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px;}
 .kpi{background:#131826;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:16px 20px;}
 .kpi .label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:6px;}
@@ -24,29 +23,26 @@ h3{font-size:14px;font-weight:600;color:#94a3b8;margin-bottom:16px;}
 .tbl-wrap{border-radius:10px;border:1px solid rgba(255,255,255,0.07);overflow:hidden;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead th{padding:10px 14px;font-weight:600;color:#64748b;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left;background:#131826;}
-thead th.r{text-align:right;}thead th.c{text-align:center;}
+thead th.r{text-align:right;}
 tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);}
 tbody tr:hover{background:rgba(255,255,255,0.025);}
 tbody td{padding:10px 14px;vertical-align:middle;}
-tbody td.r{text-align:right;}tbody td.c{text-align:center;}tbody td.dim{color:#64748b;font-size:12px;}
+tbody td.r{text-align:right;}tbody td.dim{color:#64748b;font-size:12px;}
 tfoot td{padding:10px 14px;font-weight:700;background:rgba(255,255,255,0.04);border-top:2px solid rgba(255,255,255,0.1);}
-tfoot td.r{text-align:right;color:#60a5fa;}tfoot td.c{text-align:center;color:#64748b;}
+tfoot td.r{text-align:right;color:#60a5fa;}
 .badge{display:inline-block;font-family:monospace;background:rgba(96,165,250,0.15);color:#60a5fa;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
 .badge.v110{background:rgba(52,211,153,0.15);color:#34d399;}
 .green{color:#34d399;font-weight:600;}
-.mc{display:inline-block;background:rgba(255,255,255,0.07);border-radius:10px;padding:1px 8px;font-size:12px;color:#94a3b8;}
 .leads{display:flex;flex-wrap:wrap;gap:5px;}
 .chip{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:3px 10px;font-size:12px;color:#cbd5e1;}
+.no-data{color:#475569;font-style:italic;font-size:12px;}
 </style>
 </head>
 <body>
 <div class="kpis" id="kpis"></div>
 <div class="section-title">Daily Food Cost - May 2026</div>
-<div class="card">
-  <h3>Total Food Cost by Flight (USD)</h3>
-  <div class="chart-wrap"><canvas id="chart"></canvas></div>
-</div>
-<div class="section-title">Cost per Mission by Team Lead</div>
+<div class="card"><h3>Total Food Cost by Flight (USD)</h3><div class="chart-wrap"><canvas id="chart"></canvas></div></div>
+<div class="section-title">Cost Breakdown - All 20 Flights</div>
 <div class="filters">
   <label>Flight:</label>
   <select id="fF" onchange="render()"><option value="">All</option><option value="104">V104 - ATL to LHR</option><option value="110">V110 - ATL to MAN</option></select>
@@ -55,67 +51,54 @@ tfoot td.r{text-align:right;color:#60a5fa;}tfoot td.c{text-align:center;color:#6
   <span class="info" id="info"></span>
 </div>
 <div class="tbl-wrap"><table>
-  <thead><tr>
-    <th>Date</th><th>Flight</th><th>Aircraft</th><th>Team Lead(s)</th>
-    <th class="r">Cost / Mission</th><th class="r">Total</th>
-  </tr></thead>
+  <thead><tr><th>Date</th><th>Flight</th><th>Route</th><th>Team Lead(s)</th><th class="r">Food Cost</th></tr></thead>
   <tbody id="tbody"></tbody>
-  <tfoot><tr>
-    <td colspan="5">Total</td>
-    <td class="r" id="fa"></td><td class="r" id="ft"></td>
-  </tr></tfoot>
+  <tfoot><tr><td colspan="4">Total</td><td class="r" id="ft"></td></tr></tfoot>
 </table></div>
 <script>
-var fc={"2026-05-01":{"104":8549.55,"110":6097.81},"2026-05-02":{"104":7696.54,"110":5747.35},"2026-05-03":{"104":8390.95,"110":6279.28},"2026-05-04":{"104":8300.94,"110":6396.47},"2026-05-05":{"104":7652.39,"110":6132.13},"2026-05-06":{"104":7356.35,"110":5658.77},"2026-05-07":{"104":7721.96,"110":5991.99},"2026-05-08":{"104":8131.25,"110":6033.51},"2026-05-09":{"104":8219.44,"110":6430.59},"2026-05-10":{"104":8233.10,"110":6047.14}};
-var raw=[
-  ["2026-05-01","104","350UNK",1,4274.77,4274.77,["Bobbie Jackson III"]],
-  ["2026-05-01","104","350UNK",1,4274.77,4274.77,["Gabriel Silva Mane"]],
-  ["2026-05-01","110","330UNK",1,3048.91,3048.91,["Maurice Smith"]],
-  ["2026-05-01","110","330UNK",1,3048.91,3048.91,["Christian Lawson"]],
-  ["2026-05-02","104","350UNK",1,3848.27,3848.27,["Abubakarr Sessay"]],
-  ["2026-05-02","104","350UNK",1,3848.27,3848.27,["Christian Lawson"]],
-  ["2026-05-02","110","330UNK",1,2873.68,2873.68,["Bobbie Jackson III"]],
-  ["2026-05-02","110","330UNK",1,2873.68,2873.68,["Maurice Smith"]],
-  ["2026-05-03","104","A350_2",1,4195.48,4195.48,["Bobbie Jackson III"]],
-  ["2026-05-03","104","A350_2",1,4195.48,4195.48,["Claudette St. Juste"]],
-  ["2026-05-03","110","330UNK",1,6279.28,6279.28,["Gabriel Silva Mane"]],
-  ["2026-05-04","104","A350_2",1,4150.47,4150.47,["Claudette St. Juste"]],
-  ["2026-05-04","104","A350_2",1,4150.47,4150.47,["Abubakarr Sessay"]],
-  ["2026-05-04","110","GVSXY",1,3198.24,3198.24,["Bobbie Jackson III"]],
-  ["2026-05-04","110","GVSXY",1,3198.24,3198.24,["Issa Camara"]],
-  ["2026-05-05","104","A350_2",1,3826.2,3826.2,["Claudette St. Juste"]],
-  ["2026-05-05","104","A350_2",1,3826.2,3826.2,["Abubakarr Sessay"]],
-  ["2026-05-05","110","330UNK",1,6132.13,6132.13,["Christian Lawson"]]
-];
+var raw=[["2026-05-01","104","ATL-LHR",8549.55,["Bobbie Jackson III","Gabriel Silva Mane"]],
+  ["2026-05-01","110","ATL-MAN",6097.81,["Maurice Smith","Christian Lawson"]],
+  ["2026-05-02","104","ATL-LHR",7696.54,["Abubakarr Sessay","Christian Lawson"]],
+  ["2026-05-02","110","ATL-MAN",5747.35,["Bobbie Jackson III","Maurice Smith"]],
+  ["2026-05-03","104","ATL-LHR",8390.95,["Bobbie Jackson III","Claudette St. Juste"]],
+  ["2026-05-03","110","ATL-MAN",6279.28,["Gabriel Silva Mane"]],
+  ["2026-05-04","104","ATL-LHR",8300.94,["Claudette St. Juste","Abubakarr Sessay"]],
+  ["2026-05-04","110","ATL-MAN",6396.47,["Bobbie Jackson III","Issa Camara"]],
+  ["2026-05-05","104","ATL-LHR",7652.39,["Claudette St. Juste","Abubakarr Sessay"]],
+  ["2026-05-05","110","ATL-MAN",6132.13,["Christian Lawson"]],
+  ["2026-05-06","104","ATL-LHR",7356.35,[]],
+  ["2026-05-06","110","ATL-MAN",5658.77,[]],
+  ["2026-05-07","104","ATL-LHR",7721.96,[]],
+  ["2026-05-07","110","ATL-MAN",5991.99,[]],
+  ["2026-05-08","104","ATL-LHR",8131.25,[]],
+  ["2026-05-08","110","ATL-MAN",6033.51,[]],
+  ["2026-05-09","104","ATL-LHR",8219.44,[]],
+  ["2026-05-09","110","ATL-MAN",6430.59,[]],
+  ["2026-05-10","104","ATL-LHR",8233.1,[]],
+  ["2026-05-10","110","ATL-MAN",6047.14,[]]];
 function fmt(n){return "$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fd(s){return new Date(s+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
-var data=raw.map(function(r){return{date:r[0],ob:r[1],asset:r[2],missions:r[3],cpm:r[4],total:r[5],leads:r[6]};});
+var data=raw.map(function(r){return{date:r[0],ob:r[1],route:r[2],cost:r[3],leads:r[4]};});
 var dates=[...new Set(data.map(function(r){return r.date;}))].sort();
 dates.forEach(function(d){var o=document.createElement("option");o.value=d;o.textContent=fd(d);document.getElementById("fD").appendChild(o);});
-var gt=Object.keys(fc).reduce(function(s,d){return s+(fc[d]["104"]||0)+(fc[d]["110"]||0);},0);
-var tm=data.reduce(function(s,r){return s+r.missions;},0);
+var gt=data.reduce(function(s,r){return s+r.cost;},0);
+var v104t=data.filter(function(r){return r.ob==="104";}).reduce(function(s,r){return s+r.cost;},0);
+var v110t=data.filter(function(r){return r.ob==="110";}).reduce(function(s,r){return s+r.cost;},0);
 var allLeads=new Set();data.forEach(function(r){r.leads.forEach(function(l){allLeads.add(l);});});
-document.getElementById("kpis").innerHTML=
-  "<div class='kpi'><div class='label'>Total Food Cost</div><div class='value'>"+fmt(gt)+"</div><div class='delta'>May 1-10 V104 + V110</div></div>"+
-  "<div class='kpi'><div class='label'>Total Missions</div><div class='value'>"+tm+"</div><div class='delta'>Completed missions only</div></div>"+
-  "<div class='kpi'><div class='label'>Avg Cost / Mission</div><div class='value'>"+fmt(gt/tm)+"</div><div class='delta'>V104 + V110 combined</div></div>"+
-  "<div class='kpi'><div class='label'>Team Leads</div><div class='value'>"+allLeads.size+"</div><div class='delta'>Across V104 + V110</div></div>";
-var cd=Object.keys(fc).sort();
-new Chart(document.getElementById("chart"),{type:"bar",data:{labels:cd.map(function(d){return fd(d).replace(", 2026","");}),datasets:[{label:"V104 ATL-LHR",data:cd.map(function(d){return fc[d]["104"]||0;}),backgroundColor:"rgba(96,165,250,0.75)",borderRadius:4},{label:"V110 ATL-MAN",data:cd.map(function(d){return fc[d]["110"]||0;}),backgroundColor:"rgba(52,211,153,0.75)",borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#94a3b8"}},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+fmt(c.raw);}}}},scales:{x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,0.05)"}},y:{ticks:{color:"#64748b",callback:function(v){return "$"+v.toLocaleString();}},grid:{color:"rgba(255,255,255,0.05)"}}}}});
+document.getElementById("kpis").innerHTML="<div class='kpi'><div class='label'>Total Food Cost</div><div class='value'>"+fmt(gt)+"</div><div class='delta'>May 1-10 V104 + V110</div></div><div class='kpi'><div class='label'>V104 Total</div><div class='value'>"+fmt(v104t)+"</div><div class='delta'>ATL to LHR - 10 flights</div></div><div class='kpi'><div class='label'>V110 Total</div><div class='value'>"+fmt(v110t)+"</div><div class='delta'>ATL to MAN - 10 flights</div></div><div class='kpi'><div class='label'>Team Leads</div><div class='value'>"+allLeads.size+"</div><div class='delta'>May 1-5 matched</div></div>";
+var cd=dates;
+new Chart(document.getElementById("chart"),{type:"bar",data:{labels:cd.map(function(d){return fd(d).replace(", 2026","");}),datasets:[{label:"V104 ATL-LHR",data:cd.map(function(d){return(data.find(function(r){return r.date===d&&r.ob==="104";})||{cost:0}).cost;}),backgroundColor:"rgba(96,165,250,0.75)",borderRadius:4},{label:"V110 ATL-MAN",data:cd.map(function(d){return(data.find(function(r){return r.date===d&&r.ob==="110";})||{cost:0}).cost;}),backgroundColor:"rgba(52,211,153,0.75)",borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#94a3b8"}},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+fmt(c.raw);}}}},scales:{x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,0.05)"}},y:{ticks:{color:"#64748b",callback:function(v){return "$"+v.toLocaleString();}},grid:{color:"rgba(255,255,255,0.05)"}}}}});
 function render(){
   var flt=document.getElementById("fF").value,fdt=document.getElementById("fD").value;
   var rows=data.filter(function(r){return(!flt||r.ob===flt)&&(!fdt||r.date===fdt);});
   var h2="",tc=0;
   rows.forEach(function(r){
-    var bc=r.ob==="110"?"v110":"";
-    tc+=r.total;
-    var chips=r.leads.map(function(l){return "<span class='chip'>"+l+"</span>";}).join("");
-    h2+="<tr><td>"+fd(r.date)+"</td><td><span class='badge "+bc+"'>V"+r.ob+"</span></td><td class='dim'>"+r.asset+"</td><td><div class='leads'>"+chips+"</div></td><td class='c'><span class='mc'>"+r.missions+"</span></td><td class='r'>"+fmt(r.cpm)+"</td><td class='r green'>"+fmt(r.total)+"</td></tr>";
+    var bc=r.ob==="110"?"v110":"";tc+=r.cost;
+    var lh=r.leads.length>0?r.leads.map(function(l){return "<span class='chip'>"+l+"</span>";}).join(""):"<span class='no-data'>No match in dashboard</span>";
+    h2+="<tr><td>"+fd(r.date)+"</td><td><span class='badge "+bc+"'>V"+r.ob+"</span></td><td class='dim'>"+r.route+"</td><td><div class='leads'>"+lh+"</div></td><td class='r green'>"+fmt(r.cost)+"</td></tr>";
   });
   document.getElementById("tbody").innerHTML=h2;
   document.getElementById("info").textContent=rows.length+" rows";
-  
-  document.getElementById("fa").textContent=fmt(tc/tm2);
   document.getElementById("ft").textContent=fmt(tc);
 }
 render();
