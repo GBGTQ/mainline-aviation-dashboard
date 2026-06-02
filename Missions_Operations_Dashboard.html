@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Mainline Aviation ÃÂ· Sullivan Rd Missions Dashboard</title>
+<title>Mainline Aviation ÃÂÃÂ· Sullivan Rd Missions Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
 <style>
@@ -366,7 +366,7 @@ body.wall .wall-banner .pulse {
   border-radius: 2px;
   pointer-events: none;
 }
-/* Mission colors Ã¢ÂÂ applied to lane-label and lane-accent via inline style */
+/* Mission colors ÃÂ¢ÃÂÃÂ applied to lane-label and lane-accent via inline style */
 .tl-times .lbl.m1 .ev, .tl-bar.multi .lane-label.m1 { color: #22d3ee; }
 .tl-times .lbl.m2 .ev, .tl-bar.multi .lane-label.m2 { color: #a78bfa; }
 .tl-times .lbl.m3 .ev, .tl-bar.multi .lane-label.m3 { color: #4ade80; }
@@ -578,7 +578,7 @@ body.wall .wall-banner .pulse {
     <label>Asset Type</label>
     <select id="fAsset"><option value="">All</option></select>
     <button class="reset" id="resetBtn">Reset</button>
-    <span class="badge" id="countBadge">Ã¢ÂÂ missions</span>
+    <span class="badge" id="countBadge">ÃÂ¢ÃÂÃÂ missions</span>
   </section>
 
   <div class="tab-panel active" id="panel-overview">
@@ -593,7 +593,7 @@ body.wall .wall-banner .pulse {
     <div class="section-title">Volume</div>
     <section class="grid grid-1">
       <div class="card">
-        <h3>Mission Volume by Hour <span class="hint">when work began ÃÂ· EDT</span></h3>
+        <h3>Mission Volume by Hour <span class="hint">when work began ÃÂÃÂ· EDT</span></h3>
         <div class="card-chart"><canvas id="cHour"></canvas></div>
       </div>
     </section>
@@ -616,7 +616,7 @@ body.wall .wall-banner .pulse {
     <div class="section-title">Mission Count by Team Lead</div>
     <section class="grid grid-1">
       <div class="card">
-        <h3>Total missions per lead <span class="hint">in current filter ÃÂ· sorted most-active first</span></h3>
+        <h3>Total missions per lead <span class="hint">in current filter ÃÂÃÂ· sorted most-active first</span></h3>
         <div class="card-chart xtall"><canvas id="cMissionCount"></canvas></div>
       </div>
     </section>
@@ -624,21 +624,21 @@ body.wall .wall-banner .pulse {
     <div class="section-title">Avg Intra-Shift Transit Gap</div>
     <section class="grid grid-1">
       <div class="card">
-        <h3>Prior Mission Completed Ã¢ÂÂ Next Team Arrival <span class="hint">intra-shift only ÃÂ· sorted fastest first</span></h3>
+        <h3>Prior Mission Completed ÃÂ¢ÃÂÃÂ Next Team Arrival <span class="hint">intra-shift only ÃÂÃÂ· sorted fastest first</span></h3>
         <div class="card-chart xtall"><canvas id="cTransit"></canvas></div>
       </div>
     </section>
     <div class="section-title">Avg Response Time</div>
     <section class="grid grid-1">
       <div class="card">
-        <h3>Mission Accepted Ã¢ÂÂ Team Arrival <span class="hint">engagement > 0%</span></h3>
+        <h3>Mission Accepted ÃÂ¢ÃÂÃÂ Team Arrival <span class="hint">engagement > 0%</span></h3>
         <div class="card-chart xtall"><canvas id="cResponse"></canvas></div>
       </div>
     </section>
     <div class="section-title">Avg Productivity</div>
     <section class="grid grid-1">
       <div class="card">
-        <h3>Per-Lead Productivity Score <span class="hint">Ã¢ÂÂ¥5 missions ÃÂ· 100% target</span></h3>
+        <h3>Per-Lead Productivity Score <span class="hint">ÃÂ¢ÃÂÃÂ¥5 missions ÃÂÃÂ· 100% target</span></h3>
         <div class="card-chart xtall"><canvas id="cTeamLead"></canvas></div>
       </div>
     </section>
@@ -653,7 +653,7 @@ body.wall .wall-banner .pulse {
   </div>
 
     <div class="tab-panel" id="panel-timeline">
-    <div class="section-title">Mission Timeline ÃÂ· most recent first</div>
+    <div class="section-title">Mission Timeline ÃÂÃÂ· most recent first</div>
 
     <section class="card" style="padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px;">
       <span style="font-family: var(--mono); font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em;">View:</span>
@@ -665,17 +665,17 @@ body.wall .wall-banner .pulse {
 
     <section class="card" style="padding: 14px 18px; margin-bottom: 14px;">
       <div class="timeline-legend">
-        <span class="tl-seg delayed"></span><span>Flight late Ã¢ÂÂ scheduled vs actual arrival gap</span>
-        <span class="tl-seg pre"></span><span>Pre-acceptance Ã¢ÂÂ flight on ground, mission waiting</span>
-        <span class="tl-seg drive"></span><span>Response Ã¢ÂÂ accepted Ã¢ÂÂ team driving to gate</span>
-        <span class="tl-seg setup"></span><span>Setup Ã¢ÂÂ team arrived Ã¢ÂÂ starting work</span>
-        <span class="tl-seg active"></span><span>Active mission Ã¢ÂÂ in progress</span>
-        <span class="tl-seg buffer"></span><span>Buffer Ã¢ÂÂ completed Ã¢ÂÂ flight departure</span>
+        <span class="tl-seg delayed"></span><span>Flight late ÃÂ¢ÃÂÃÂ scheduled vs actual arrival gap</span>
+        <span class="tl-seg pre"></span><span>Pre-acceptance ÃÂ¢ÃÂÃÂ flight on ground, mission waiting</span>
+        <span class="tl-seg drive"></span><span>Response ÃÂ¢ÃÂÃÂ accepted ÃÂ¢ÃÂÃÂ team driving to gate</span>
+        <span class="tl-seg setup"></span><span>Setup ÃÂ¢ÃÂÃÂ team arrived ÃÂ¢ÃÂÃÂ starting work</span>
+        <span class="tl-seg active"></span><span>Active mission ÃÂ¢ÃÂÃÂ in progress</span>
+        <span class="tl-seg buffer"></span><span>Buffer ÃÂ¢ÃÂÃÂ completed ÃÂ¢ÃÂÃÂ flight departure</span>
       </div>
     </section>
 
     <section class="card" style="padding: 16px 18px;">
-      <h3>Timeline rows <span class="hint">each row spans Scheduled/Actual Arrival Ã¢ÂÂ Flight Departure ÃÂ· hover for details</span></h3>
+      <h3>Timeline rows <span class="hint">each row spans Scheduled/Actual Arrival ÃÂ¢ÃÂÃÂ Flight Departure ÃÂÃÂ· hover for details</span></h3>
       <div id="timelineList"></div>
       <div id="timelineMore" class="timeline-more"></div>
     </section>
@@ -684,12 +684,12 @@ body.wall .wall-banner .pulse {
   <div class="tab-panel" id="panel-missions">
     <div class="section-title">Mission Detail</div>
     <section class="table-card">
-      <h3>All Missions <span class="hint" style="font-weight:400;color:var(--text-3)">Ã¢ÂÂ click any column header to sort ÃÂ· search to filter further</span></h3>
+      <h3>All Missions <span class="hint" style="font-weight:400;color:var(--text-3)">ÃÂ¢ÃÂÃÂ click any column header to sort ÃÂÃÂ· search to filter further</span></h3>
       <div id="tbl"></div>
     </section>
   </div>
 
-  <footer>Mainline Aviation ÃÂ· ATL Operations</footer>
+  <footer>Mainline Aviation ÃÂÃÂ· ATL Operations</footer>
 </div>
 
 <script>
@@ -707,9 +707,9 @@ const PALETTE = {
   continuity: { intra: "#22d3ee", shift_break: "#94a3b8", overlap: "#f87171", skipped: "#fbbf24", first: "#a78bfa" },
 };
 
-function fmtPct(v, d=0) { return v == null ? "Ã¢ÂÂ" : v.toFixed(d) + "%"; }
-function fmtMin(v, d=0) { return v == null ? "Ã¢ÂÂ" : v.toFixed(d) + " min"; }
-function fmtNum(v) { return v == null ? "Ã¢ÂÂ" : v.toLocaleString(); }
+function fmtPct(v, d=0) { return v == null ? "ÃÂ¢ÃÂÃÂ" : v.toFixed(d) + "%"; }
+function fmtMin(v, d=0) { return v == null ? "ÃÂ¢ÃÂÃÂ" : v.toFixed(d) + " min"; }
+function fmtNum(v) { return v == null ? "ÃÂ¢ÃÂÃÂ" : v.toLocaleString(); }
 function uniqueSorted(arr) { return [...new Set(arr)].filter(Boolean).sort(); }
 function avg(arr) { const v = arr.filter(x => x != null); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null; }
 function median(arr) {
@@ -783,10 +783,10 @@ function renderKpis(rows) {
     return v>=hi ? "good" : (v<lo ? "bad" : "warn");
   };
   const kpis = [
-    { label: "Total Missions", value: fmtNum(total), delta: proper + " proper ÃÂ· " + (total-proper) + " skipped" },
+    { label: "Total Missions", value: fmtNum(total), delta: proper + " proper ÃÂÃÂ· " + (total-proper) + " skipped" },
     { label: "On-Time Rate",   value: fmtPct(onTime,1), delta: lateCount + " late completions", cls: cls(onTime, 95, 85) },
     { label: "Avg Response",   value: fmtMin(respAvg,1), delta: "median " + fmtMin(respMed,0), cls: cls(respAvg, 60, 100, true) },
-    { label: "Avg Intra-Shift Transit", value: fmtMin(transitAvg,1), delta: "median " + fmtMin(transitMed,0) + " ÃÂ· n=" + intraRows.length, cls: cls(transitAvg, 15, 30, true) },
+    { label: "Avg Intra-Shift Transit", value: fmtMin(transitAvg,1), delta: "median " + fmtMin(transitMed,0) + " ÃÂÃÂ· n=" + intraRows.length, cls: cls(transitAvg, 15, 30, true) },
     { label: "Avg Productivity", value: fmtPct(prod,1), delta: "vs. 100% target", cls: cls(prod, 100, 70) },
     { label: "Avg Engagement",   value: fmtPct(eng,1), delta: "team participation", cls: cls(eng, 95, 80) },
   ];
@@ -796,7 +796,7 @@ function renderKpis(rows) {
        <div class="value">${k.value}</div>
        <div class="delta">${k.delta||""}</div>
      </div>`).join("");
-  document.getElementById("countBadge").textContent = "Ã¢ÂÂ " + fmtNum(total) + " missions";
+  document.getElementById("countBadge").textContent = "ÃÂ¢ÃÂÃÂ " + fmtNum(total) + " missions";
 }
 
 function renderLeaderboard(rows) {
@@ -818,19 +818,19 @@ function renderLeaderboard(rows) {
   cards.sort((a,b) => (b.prod ?? -1) - (a.prod ?? -1));
   const html = cards.slice(0, 12).map((c, i) => {
     const rankClass = i < 3 ? "top" : "";
-    const medal = i === 0 ? "Ã¢ÂÂ" : (i === 1 ? "Ã¢ÂÂ¦" : (i === 2 ? "Ã¢ÂÂ§" : "#" + (i+1)));
+    const medal = i === 0 ? "ÃÂ¢ÃÂÃÂ" : (i === 1 ? "ÃÂ¢ÃÂÃÂ¦" : (i === 2 ? "ÃÂ¢ÃÂÃÂ§" : "#" + (i+1)));
     return `<div class="leader">
       <div class="rank ${rankClass}">${medal} ${i < 3 ? ["GOLD","SILVER","BRONZE"][i] : "RANK " + (i+1)}</div>
       <div class="name">${c.name}</div>
       <div class="stats">
         <span>Prod <b>${fmtPct(c.prod,0)}</b></span>
         <span>Resp <b>${fmtMin(c.resp,0)}</b></span>
-        <span>Transit <b>${c.transit != null ? Math.round(c.transit) + "m" : "Ã¢ÂÂ"}</b></span>
+        <span>Transit <b>${c.transit != null ? Math.round(c.transit) + "m" : "ÃÂ¢ÃÂÃÂ"}</b></span>
         <span>Missions <b>${c.n}</b></span>
       </div>
     </div>`;
   }).join("");
-  document.getElementById("leaderboard").innerHTML = html || `<div class="leader"><div class="name" style="color:var(--text-3)">No leads with Ã¢ÂÂ¥5 missions in this filter</div></div>`;
+  document.getElementById("leaderboard").innerHTML = html || `<div class="leader"><div class="name" style="color:var(--text-3)">No leads with ÃÂ¢ÃÂÃÂ¥5 missions in this filter</div></div>`;
 }
 
 const charts = {};
@@ -1011,12 +1011,12 @@ function renderCharts(rows) {
   const transitByLead = makeAvg(intraOnly, "tl", "transit").filter(e => e[2] >= 3).sort((a,b) => a[1] - b[1]);
   bar("cTransit",
     transitByLead.map(e => [e[0], +e[1].toFixed(1)]),
-    { horizontal: true, label: "Avg transit", suffix: " min", color: PALETTE.cyan, counts: transitByLead.map(e => e[2]), xtitle: "Avg minutes (prior completed Ã¢ÂÂ next arrival)" });
+    { horizontal: true, label: "Avg transit", suffix: " min", color: PALETTE.cyan, counts: transitByLead.map(e => e[2]), xtitle: "Avg minutes (prior completed ÃÂ¢ÃÂÃÂ next arrival)" });
 
   const respLead = makeAvg(rows, "tl", "resp").filter(e => e[2] >= 5).sort((a,b) => a[1] - b[1]);
   bar("cResponse",
     respLead.map(e => [e[0], +e[1].toFixed(1)]),
-    { horizontal: true, label: "Avg Response", suffix: " min", color: PALETTE.purple, counts: respLead.map(e => e[2]), xtitle: "Avg minutes (accepted Ã¢ÂÂ team arrival)" });
+    { horizontal: true, label: "Avg Response", suffix: " min", color: PALETTE.purple, counts: respLead.map(e => e[2]), xtitle: "Avg minutes (accepted ÃÂ¢ÃÂÃÂ team arrival)" });
 
   const tl = makeAvg(rows, "tl", "prod").filter(e => e[2] >= 5);
   bar("cTeamLead",
@@ -1037,13 +1037,13 @@ function parseSpringshotTs(s) {
   return new Date(year, monthIdx, parseInt(m[2]), parseInt(m[3]), parseInt(m[4])).getTime();
 }
 function fmtDur(min) {
-  if (min == null) return "Ã¢ÂÂ";
+  if (min == null) return "ÃÂ¢ÃÂÃÂ";
   if (min < 60) return Math.round(min) + "m";
   const h = Math.floor(min/60), mm = Math.round(min%60);
   return h + "h " + (mm < 10 ? "0" + mm : mm) + "m";
 }
 function fmtClock(s) {
-  if (!s) return "Ã¢ÂÂ";
+  if (!s) return "ÃÂ¢ÃÂÃÂ";
   const m = s.match(/^(\w+ \d+), (\d+:\d+)/);
   return m ? m[1] + " " + m[2] : s;
 }
@@ -1245,24 +1245,24 @@ function renderTimelinePerMission(TL, list, more) {
 
 let grid = null;
 function transitDisplay(r) {
-  if (r.transit_kind === "skipped") return "Ã¢ÂÂ (skipped)";
-  if (r.transit_kind === "first") return "Ã¢ÂÂ (first)";
-  if (r.transit == null) return "Ã¢ÂÂ";
-  if (r.transit_kind === "overlap") return r.transit.toFixed(0) + "m Ã¢ÂÂ ";
+  if (r.transit_kind === "skipped") return "ÃÂ¢ÃÂÃÂ (skipped)";
+  if (r.transit_kind === "first") return "ÃÂ¢ÃÂÃÂ (first)";
+  if (r.transit == null) return "ÃÂ¢ÃÂÃÂ";
+  if (r.transit_kind === "overlap") return r.transit.toFixed(0) + "m ÃÂ¢ÃÂÃÂ ";
   if (r.transit_kind === "shift_break") return Math.round(r.transit) + "m (break)";
   if (r.transit_kind === "intra") return r.transit.toFixed(0) + "m";
-  return "Ã¢ÂÂ";
+  return "ÃÂ¢ÃÂÃÂ";
 }
 function renderTable(rows) {
   const data = rows.map(r => [
     r.tl, r.al, r.mt, r.atype, r.ast, r.loc,
     r.proper ? "Yes" : "No",
-    r.eng != null ? r.eng + "%" : "Ã¢ÂÂ",
-    r.prod != null ? r.prod + "%" : "Ã¢ÂÂ",
-    r.resp != null ? r.resp.toFixed(0) + "m" : "Ã¢ÂÂ",
-    r.dur != null ? r.dur.toFixed(0) + "m" : "Ã¢ÂÂ",
+    r.eng != null ? r.eng + "%" : "ÃÂ¢ÃÂÃÂ",
+    r.prod != null ? r.prod + "%" : "ÃÂ¢ÃÂÃÂ",
+    r.resp != null ? r.resp.toFixed(0) + "m" : "ÃÂ¢ÃÂÃÂ",
+    r.dur != null ? r.dur.toFixed(0) + "m" : "ÃÂ¢ÃÂÃÂ",
     transitDisplay(r),
-    r.ot == null ? "Ã¢ÂÂ" : (r.ot ? "On time" : "Late"),
+    r.ot == null ? "ÃÂ¢ÃÂÃÂ" : (r.ot ? "On time" : "Late"),
     r.ma, r.tarr, r.ms, r.mc, r.fd, r.inb, r.outb,
   ]);
   const target = document.getElementById("tbl");
@@ -1291,7 +1291,7 @@ function switchTab(name) {
   // proper dimensions now that they're visible.
   setTimeout(() => {
     Object.values(charts).forEach(c => { try { c.resize(); } catch (e) {} });
-    // For tabs whose charts may have rendered at 0ÃÂ0, re-run the full render
+    // For tabs whose charts may have rendered at 0ÃÂÃÂ0, re-run the full render
     // pass once visible. Cheap (in-memory) and guarantees correct sizing.
     rerenderAll();
   }, 50);
@@ -1370,7 +1370,7 @@ function init() {
     // Add a small "watching for new data" indicator at the bottom-right
     const banner = document.createElement("div");
     banner.className = "wall-banner";
-    banner.innerHTML = '<span class="pulse"></span><span>LIVE ÃÂ· checking for new data every ' + _refreshSec + 's ÃÂ· <span id="wall-stamp"></span></span>';
+    banner.innerHTML = '<span class="pulse"></span><span>LIVE ÃÂÃÂ· checking for new data every ' + _refreshSec + 's ÃÂÃÂ· <span id="wall-stamp"></span></span>';
     document.body.appendChild(banner);
     document.getElementById("wall-stamp").textContent = SNAPSHOT_TIME;
 
@@ -1384,7 +1384,7 @@ function init() {
         if (m && m[1] !== SNAPSHOT_TIME) {
           location.reload();
         }
-      } catch (e) { /* network blip Ã¢ÂÂ ignore, keep showing current data */ }
+      } catch (e) { /* network blip ÃÂ¢ÃÂÃÂ ignore, keep showing current data */ }
     }, _refreshSec * 1000);
   }
 }
@@ -1466,13 +1466,6 @@ tfoot td.r{text-align:right;color:#60a5fa;}
     <div><div class="aname">SAS Scandinavian</div><div class="atotal">No data yet</div></div>
     <span class="abadge" style="background:#003F87;">SK</span>
   </div>
-  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;padding:4px 0;">
-    <label style="font-size:12px;color:#64748b;font-weight:500;">Month:</label>
-    <select id="vs-fM" onchange="renderVS()" style="background:#0f1623;border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:#e8eef5;padding:5px 10px;font-size:12px;outline:none;">
-      <option value="">All</option>
-      <option value="2026-05" selected>May 2026</option>
-    </select>
-  </div>
 </div>
 
 <!-- Virgin Atlantic Panel -->
@@ -1481,12 +1474,109 @@ tfoot td.r{text-align:right;color:#60a5fa;}
   <div class="section-title">Daily Food Cost &mdash; May 2026</div>
   <div class="card"><h3>Food Cost by Flight (USD)</h3><div class="chart-wrap"><canvas id="vs-chart"></canvas></div></div>
   <div class="section-title">Cost Breakdown &mdash; All 20 Flights</div>
-  
+  <div class="filters">
+    <label>Month:</label>
+    <select id="vs-fM" onchange="renderVS()">
+      <option value="">All</option>
+      <option value="2026-05" selected>May 2026</option>
+    </select>
+    <span class="info" id="vs-info"></span>
+  </div>
   <div class="tbl-wrap"><table>
     <thead><tr><th>Date</th><th>Flight</th><th>Airline</th><th>Route</th><th>Team Lead(s)</th><th class="r">Food Cost</th></tr></thead>
     <tbody id="vs-tbody"></tbody>
     <tfoot><tr><td colspan="5">Total</td><td class="r" id="vs-ft"></td></tr></tfoot>
   </table></div>
+</div>
+
+<!-- American Airlines Panel -->
+<div class="panel" id="panel-aa">
+  <div class="empty-state">
+    <div class="icon">&#9992;</div>
+    <div class="msg">No data uploaded for American Airlines</div>
+    <div class="sub">Upload an AA supplier invoice Excel sheet to populate this section</div>
+  </div>
+</div>
+
+<!-- Ethiopian Airlines Panel -->
+<div class="panel" id="panel-et">
+  <div class="empty-state">
+    <div class="icon">&#9992;</div>
+    <div class="msg">No data uploaded for Ethiopian Airlines</div>
+    <div class="sub">Upload an ET supplier invoice Excel sheet to populate this section</div>
+  </div>
+</div>
+
+<!-- SAS Panel -->
+<div class="panel" id="panel-sk">
+  <div class="empty-state">
+    <div class="icon">&#9992;</div>
+    <div class="msg">No data uploaded for SAS Scandinavian Airlines</div>
+    <div class="sub">Upload an SK supplier invoice Excel sheet to populate this section</div>
+  </div>
+</div>
+
+<script>
+var vsRaw=[["2026-05-01","104","ATL-LHR",8549.55,["Bobbie Jackson III","Gabriel Silva Mane"]],
+  ["2026-05-01","110","ATL-MAN",6097.81,["Maurice Smith","Christian Lawson"]],
+  ["2026-05-02","104","ATL-LHR",7696.54,["Abubakarr Sessay","Christian Lawson"]],
+  ["2026-05-02","110","ATL-MAN",5747.35,["Bobbie Jackson III","Maurice Smith"]],
+  ["2026-05-03","104","ATL-LHR",8390.95,["Bobbie Jackson III","Claudette St. Juste"]],
+  ["2026-05-03","110","ATL-MAN",6279.28,["Gabriel Silva Mane"]],
+  ["2026-05-04","104","ATL-LHR",8300.94,["Claudette St. Juste","Abubakarr Sessay"]],
+  ["2026-05-04","110","ATL-MAN",6396.47,["Bobbie Jackson III","Issa Camara"]],
+  ["2026-05-05","104","ATL-LHR",7652.39,["Claudette St. Juste","Abubakarr Sessay"]],
+  ["2026-05-05","110","ATL-MAN",6132.13,["Christian Lawson"]],
+  ["2026-05-06","104","ATL-LHR",7356.35,["Christian Lawson","Tecari Brown"]],
+  ["2026-05-06","110","ATL-MAN",5658.77,["Claudette St. Juste","Abdou Diakhate"]],
+  ["2026-05-07","104","ATL-LHR",7721.96,["Christian Lawson","Abdou Diakhate"]],
+  ["2026-05-07","110","ATL-MAN",5991.99,["Bobbie Jackson III","Abdou Diakhate"]],
+  ["2026-05-08","104","ATL-LHR",8131.25,["Gabriel Silva Mane","Maurice Smith"]],
+  ["2026-05-08","110","ATL-MAN",6033.51,["Christian Lawson","Bobbie Jackson III"]],
+  ["2026-05-09","104","ATL-LHR",8219.44,["Maurice Smith","Gabriel Silva Mane"]],
+  ["2026-05-09","110","ATL-MAN",6430.59,["Christian Lawson","Bobbie Jackson III"]],
+  ["2026-05-10","104","ATL-LHR",8233.1,["Gabriel Silva Mane","Rachel Lester"]],
+  ["2026-05-10","110","ATL-MAN",6047.14,["Claudette St. Juste","Maurice Smith"]]];
+function fmt(n){return "$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fd(s){return new Date(s+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
+var vsData=vsRaw.map(function(r){return{date:r[0],ob:r[1],route:r[2],cost:r[3],leads:r[4]};});
+var gt=vsData.reduce(function(s,r){return s+r.cost;},0);
+var v104t=vsData.filter(function(r){return r.ob==="104";}).reduce(function(s,r){return s+r.cost;},0);
+var v110t=vsData.filter(function(r){return r.ob==="110";}).reduce(function(s,r){return s+r.cost;},0);
+document.getElementById("vs-total").textContent=fmt(gt);
+document.getElementById("vs-kpis").innerHTML=
+  "<div class='kpi'><div class='label'>Total Food Cost</div><div class='value'>"+fmt(gt)+"</div><div class='delta'>May 1-10 &mdash; V104 + V110</div></div>"+
+  "<div class='kpi'><div class='label'>V104 &mdash; ATL to LHR</div><div class='value'>"+fmt(v104t)+"</div><div class='delta'>10 departures</div></div>"+
+  "<div class='kpi'><div class='label'>V110 &mdash; ATL to MAN</div><div class='value'>"+fmt(v110t)+"</div><div class='delta'>10 departures</div></div>"+"<div class='kpi'><div class='label'>Avg Cost / Mission</div><div class='value'>"+fmt(gt/56)+"</div><div class='delta'>56 matched missions Â· May 2026</div></div>";
+var dates=[...new Set(vsData.map(function(r){return r.date;}))].sort();
+
+var vsChart=null;
+(function(){
+  var cd=dates;
+  vsChart=new Chart(document.getElementById("vs-chart"),{type:"bar",data:{labels:cd.map(function(d){return fd(d).replace(", 2026","");}),datasets:[{label:"V104 ATL-LHR",data:cd.map(function(d){return(vsData.find(function(r){return r.date===d&&r.ob==="104";})||{cost:0}).cost;}),backgroundColor:"rgba(196,30,58,0.7)",borderRadius:4},{label:"V110 ATL-MAN",data:cd.map(function(d){return(vsData.find(function(r){return r.date===d&&r.ob==="110";})||{cost:0}).cost;}),backgroundColor:"rgba(196,30,58,0.35)",borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:"#94a3b8"}},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+fmt(c.raw);}}}},scales:{x:{ticks:{color:"#64748b"},grid:{color:"rgba(255,255,255,0.05)"}},y:{ticks:{color:"#64748b",callback:function(v){return "$"+v.toLocaleString();}},grid:{color:"rgba(255,255,255,0.05)"}}}}});
+})();
+function renderVS(){
+  var fmo=document.getElementById("vs-fM").value;
+  var rows=vsData.filter(function(r){return(!fmo||r.date.startsWith(fmo));});
+  var h2="",tc=0;
+  rows.forEach(function(r){
+    var bc=r.ob==="110"?"v110":"";tc+=r.cost;
+    var lh=r.leads.map(function(l){return "<span class='chip'>"+l+"</span>";}).join("");
+    h2+="<tr><td>"+fd(r.date)+"</td><td><span class='badge "+bc+"'>V"+r.ob+"</span></td><td><span style='background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;'>Virgin Atlantic</span></td><td class='dim'>"+r.route+"</td><td><div class='leads'>"+lh+"</div></td><td class='r green'>"+fmt(r.cost)+"</td></tr>";
+  });
+  document.getElementById("vs-tbody").innerHTML=h2;
+  document.getElementById("vs-info").textContent=rows.length+" rows";
+  document.getElementById("vs-ft").textContent=fmt(tc);
+}
+renderVS();
+function switchAirline(code){
+  document.querySelectorAll(".atab").forEach(function(t){t.classList.remove("active");});
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+  event.currentTarget.classList.add("active");
+  document.getElementById("panel-"+code).classList.add("active");
+}
+</script>
+</div>
 </div>
 
 <!-- American Airlines Panel -->
@@ -1585,7 +1675,7 @@ function switchAirline(code){
     <div style="font-size:17px;font-weight:600;color:#e2e8f0;margin-bottom:36px;">Sullivan Rd Missions Dashboard</div>
     <input type="password" id="pw-input" placeholder="Password" autofocus style="width:100%;box-sizing:border-box;padding:13px 16px;background:#0b0f1a;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e2e8f0;font-size:15px;outline:none;margin-bottom:12px;" onkeydown="if(event.key==='Enter')doLogin()">
     <button onclick="doLogin()" style="width:100%;padding:13px;background:#2563eb;border:none;border-radius:8px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Access Dashboard</button>
-    <div id="pw-error" style="color:#f87171;font-size:13px;margin-top:12px;visibility:hidden;">Incorrect password Ã¢ÂÂ please try again.</div>
+    <div id="pw-error" style="color:#f87171;font-size:13px;margin-top:12px;visibility:hidden;">Incorrect password ÃÂ¢ÃÂÃÂ please try again.</div>
   </div>
 </div>
 <script>
