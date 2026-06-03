@@ -535,6 +535,7 @@ body.wall .wall-banner .pulse {
   font-weight: 600;
 }
 
+#panel-financing.active ~ * .filters, .wrap:has(#panel-financing.active) .filters { display: none !important; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
 </head>
@@ -558,10 +559,10 @@ body.wall .wall-banner .pulse {
 
 <nav class="tabs">
   <button class="tab active" data-tab="overview">Overview</button>
-  <button class="tab" data-tab="leads">Team Leads <span class="count" id="leadCount"></span></button>
-  <button class="tab" data-tab="timeline">Timeline</button>
-  <button class="tab" data-tab="missions">Missions <span class="count" id="missionCount"></span></button>
-  <button class="tab" data-tab="financing">Financing</button>
+  <button class="tab" data-tab="leads" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';">Team Leads <span class="count" id="leadCount"></span></button>
+  <button class="tab" data-tab="timeline" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';">Timeline</button>
+  <button class="tab" data-tab="missions" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';">Missions <span class="count" id="missionCount"></span></button>
+  <button class="tab" data-tab="financing" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='none';">Financing</button>
 </nav>
 
 <div class="wrap">
