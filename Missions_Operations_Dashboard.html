@@ -1563,6 +1563,20 @@ window.switchAirline=function(code){
     if(t.getAttribute("onclick")&&t.getAttribute("onclick").indexOf("'"+code+"'")!==-1)t.classList.add("active");
   });
 };
+// Hook switchTab so financing tab always re-shows the active airline panel
+(function(){
+  var _orig=window.switchTab;
+  if(typeof _orig==="function"){
+    window.switchTab=function(name){
+      _orig(name);
+      if(name==="financing"){
+        var active=document.querySelector("#panel-financing .atab.active");
+        var code=active?(active.getAttribute("onclick")||"").replace(/.*'([^']+)'.*/,"$1"):"vs";
+        window.switchAirline(code||"vs");
+      }
+    };
+  }
+})();
 </script>
 <!-- American Airlines Panel -->
 
