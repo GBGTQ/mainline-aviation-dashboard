@@ -1424,6 +1424,66 @@ document.addEventListener("DOMContentLoaded", init);
 </script>
 
 
+
+<script>
+
+  function parseM(v){
+    var n=parseFloat((v||'').toString().replace(/[$,\s]/g,''));
+    return isNaN(n)?null:n;
+  }
+
+  // --- Render loaded data panel ---
+  function auRenderPanel(d){
+    var code=d.code, headers=d.headers, rows=d.rows;
+    var dIdx=d.dateIdx, fIdx=d.flightIdx, cIdx=d.costIdx;
+
+    var costs=cIdx>=0?rows.map(function(r){return parseM(r[cIdx]);}).filter(function(v){return v!==null;}):[];
+    var total=costs.reduce(function(a,b){return a+b;},0);
+    var avg=costs.length?total/costs.length:0;
+    var dates=dIdx>=0?rows.map(function(r){return r[dIdx];}).filter(Boolean):[];
+    var dr=dates.length?dates[0]+(dates.length>1?' – '+dates[dates.length-1]:''):'—';
+
+    var kpis='<div class="au-kpis">'+
+      (cIdx>=0?'<div class="au-kpi"><div class="au-lbl">Total Cost</div><div class="au-val">'+fmtM(total)+'</div><div class="au-sub">'+rows.length+' records</div></div>':'') +
+      (cIdx>=0&&rows.length?'<div class="au-kpi"><div class="au-lbl">Avg / Flight</div><div class="au-val" style="color:#60a5fa;">'+fmtM(avg)+'</div><div class="au-sub">per record</div></div>':'')+
+      '<div class="au-kpi"><div class="au-lbl">Records</div><div class="au-val">'+rows.length+'</div><div class="au-sub">'+headers.length+' columns</div></div>'+
+      (dr!=='—'?'<div class="au-kpi"><div class="au-lbl">Date Range</div><div class="au-val" style="font-size:13px;margin-top:4px;">'+dr+'</div></div>':'')+
+    '</div>';
+
+    var thS='padding:8px 12px;text-align:left;border-bottom:1px solid #334155;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;background:#1e293b;white-space:nowrap;position:sticky;top:0;z-index:1;';
+    var tbl='<div style="overflow:auto;max-height:380px;border-radius:8px;border:1px solid #1e293b;">'+
+      '<table style="width:100%;border-collapse:collapse;">'+
+      '<thead><tr>'+headers.map(function(h){return '<th style="'+thS+'">'+h+'</th>';}).join('')+'</tr></thead>'+
+      '<tbody>'+rows.map(function(row,ri){
+        var bg=ri%2===0?'#060c18':'#090e1c';
+        return '<tr style="background:'+bg+'">'+headers.map(function(_,i){
+          var v=row[i]||'';
+          var ex=i===cIdx?'color:#34d399;font-weight:600;':i===dIdx?'color:#94a3b8;':'';
+          return '<td style="padding:7px 12px;border-bottom:1px solid #0f172a;font-size:12px;color:#e2e8f0;white-space:nowrap;'+ex+'">'+v+'</td>';
+        }).join('')+'</tr>';
+      }).join('')+'</tbody></table></div>';
+
+    document.getElementById('loaded-'+code).innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">'+
+        '<div><div style="font-size:15px;font-weight:700;color:#f1f5f9;">'+AIRLINES[code]+' · Uploaded Data</div>'+
+             '<div style="font-size:11px;color:#64748b;margin-top:2px;">📄 '+d.fileName+' · '+d.uploadedAt+'</div></div>'+
+        '<button onclick="auClear(''+code+'')" style="padding:6px 14px;background:#1e293b;border:1px solid #334155;color:#64748b;border-radius:6px;cursor:pointer;font-size:11px;">↺ Re-upload</button>'+
+      '</div>'+kpis+tbl;
+
+    document.getElementById('loaded-'+code).style.display='';
+    document.getElementById('empty-'+code).style.display='none';
+  }
+
+  // --- Init: load saved data from localStorage ---
+  ['aa','et','sk'].forEach(function(code){
+    var raw=localStorage.getItem('airline_'+code);
+    if(!raw) return;
+    try{ auRenderPanel(JSON.parse(raw)); }catch(e){ localStorage.removeItem('airline_'+code); }
+  });
+
+})();
+
+</script>
 <script id="airline-upload">
 (function(){
   // --- Inject CSS ---
@@ -1813,36 +1873,7 @@ renderVSForMonth(vsMonths[vsMonths.length-1]);
 </div>
 
 <!-- American Airlines Panel -->
-<div class="panel" id="panel-aa">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for American Airlines</div>
-    <div class="sub">Upload an AA supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-<!-- Ethiopian Airlines Panel -->
-<div class="panel" id="panel-et">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for Ethiopian Airlines</div>
-    <div class="sub">Upload an ET supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-<!-- SAS Panel -->
-<div class="panel" id="panel-sk">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for SAS Scandinavian Airlines</div>
-    <div class="sub">Upload an SK supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-
-</div>
-</div>
-<div id="login-overlay" style="position:fixed;inset:0;z-index:9999;background:#0b0f1a;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+id="login-overlay" style="position:fixed;inset:0;z-index:9999;background:#0b0f1a;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
   <div style="background:#131929;border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:48px 44px;width:380px;max-width:90vw;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.6);">
     <div style="width:52px;height:52px;background:#1e3a5f;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:20px;font-weight:700;color:#60a5fa;letter-spacing:-0.02em;">MA</div>
     <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:#64748b;font-weight:600;margin-bottom:6px;">Mainline Aviation</div>
@@ -1868,66 +1899,6 @@ async function doLogin(){
   }
 }
 </script>
-</body></html>
-+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  }
-  function parseM(v){
-    var n=parseFloat((v||'').toString().replace(/[$,\s]/g,''));
-    return isNaN(n)?null:n;
-  }
-
-  // --- Render loaded data panel ---
-  function auRenderPanel(d){
-    var code=d.code, headers=d.headers, rows=d.rows;
-    var dIdx=d.dateIdx, fIdx=d.flightIdx, cIdx=d.costIdx;
-
-    var costs=cIdx>=0?rows.map(function(r){return parseM(r[cIdx]);}).filter(function(v){return v!==null;}):[];
-    var total=costs.reduce(function(a,b){return a+b;},0);
-    var avg=costs.length?total/costs.length:0;
-    var dates=dIdx>=0?rows.map(function(r){return r[dIdx];}).filter(Boolean):[];
-    var dr=dates.length?dates[0]+(dates.length>1?' – '+dates[dates.length-1]:''):'—';
-
-    var kpis='<div class="au-kpis">'+
-      (cIdx>=0?'<div class="au-kpi"><div class="au-lbl">Total Cost</div><div class="au-val">'+fmtM(total)+'</div><div class="au-sub">'+rows.length+' records</div></div>':'') +
-      (cIdx>=0&&rows.length?'<div class="au-kpi"><div class="au-lbl">Avg / Flight</div><div class="au-val" style="color:#60a5fa;">'+fmtM(avg)+'</div><div class="au-sub">per record</div></div>':'')+
-      '<div class="au-kpi"><div class="au-lbl">Records</div><div class="au-val">'+rows.length+'</div><div class="au-sub">'+headers.length+' columns</div></div>'+
-      (dr!=='—'?'<div class="au-kpi"><div class="au-lbl">Date Range</div><div class="au-val" style="font-size:13px;margin-top:4px;">'+dr+'</div></div>':'')+
-    '</div>';
-
-    var thS='padding:8px 12px;text-align:left;border-bottom:1px solid #334155;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;background:#1e293b;white-space:nowrap;position:sticky;top:0;z-index:1;';
-    var tbl='<div style="overflow:auto;max-height:380px;border-radius:8px;border:1px solid #1e293b;">'+
-      '<table style="width:100%;border-collapse:collapse;">'+
-      '<thead><tr>'+headers.map(function(h){return '<th style="'+thS+'">'+h+'</th>';}).join('')+'</tr></thead>'+
-      '<tbody>'+rows.map(function(row,ri){
-        var bg=ri%2===0?'#060c18':'#090e1c';
-        return '<tr style="background:'+bg+'">'+headers.map(function(_,i){
-          var v=row[i]||'';
-          var ex=i===cIdx?'color:#34d399;font-weight:600;':i===dIdx?'color:#94a3b8;':'';
-          return '<td style="padding:7px 12px;border-bottom:1px solid #0f172a;font-size:12px;color:#e2e8f0;white-space:nowrap;'+ex+'">'+v+'</td>';
-        }).join('')+'</tr>';
-      }).join('')+'</tbody></table></div>';
-
-    document.getElementById('loaded-'+code).innerHTML=
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">'+
-        '<div><div style="font-size:15px;font-weight:700;color:#f1f5f9;">'+AIRLINES[code]+' · Uploaded Data</div>'+
-             '<div style="font-size:11px;color:#64748b;margin-top:2px;">📄 '+d.fileName+' · '+d.uploadedAt+'</div></div>'+
-        '<button onclick="auClear(''+code+'')" style="padding:6px 14px;background:#1e293b;border:1px solid #334155;color:#64748b;border-radius:6px;cursor:pointer;font-size:11px;">↺ Re-upload</button>'+
-      '</div>'+kpis+tbl;
-
-    document.getElementById('loaded-'+code).style.display='';
-    document.getElementById('empty-'+code).style.display='none';
-  }
-
-  // --- Init: load saved data from localStorage ---
-  ['aa','et','sk'].forEach(function(code){
-    var raw=localStorage.getItem('airline_'+code);
-    if(!raw) return;
-    try{ auRenderPanel(JSON.parse(raw)); }catch(e){ localStorage.removeItem('airline_'+code); }
-  });
-
-})();
-</script>
-</body>
 
 <div class="tab-panel" id="panel-financing">
 <style id="fin-styles">
@@ -1990,7 +1961,7 @@ tfoot td.r{text-align:right;color:#60a5fa;}
 <div class="airline-tabs" style="justify-content:center;">
   <div class="atab active" onclick="switchAirline('vs')">
     <div class="dot" style="background:#C41E3A;"></div>
-    <div><div class="aname">Virgin Atlantic</div><div class="atotal" id="vs-total">Loading...</div></div>
+    <div><div class="aname">Virgin Atlantic</div><div class="atotal" id="vs-total">$141,067.51</div></div>
     <span class="abadge" style="background:#C41E3A;">VS</span>
   </div>
   <div class="atab" onclick="switchAirline('aa')">
@@ -2012,26 +1983,26 @@ tfoot td.r{text-align:right;color:#60a5fa;}
 
 <!-- Virgin Atlantic Panel -->
 <div class="panel active" id="panel-vs">
-  <div id="vs-month-filter" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;"><span style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;">Month:</span></div>
-<div id="fin-data-stamp" style="font-size:11px;color:#94a3b8;margin-bottom:10px;font-style:italic;padding-left:2px;"></div>
+  <div id="vs-month-filter" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;"><span style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;">Month:</span><button class="month-pill active" data-month="2026-05">May 2026</button></div>
+<div id="fin-data-stamp" style="font-size:11px;color:#94a3b8;margin-bottom:10px;font-style:italic;padding-left:2px;">Data as of May 10, 2026</div>
   <div style="display:flex !important;flex-wrap:nowrap !important;gap:8px !important;margin-bottom:24px !important;" id="vs-kpis">
-<div class="kpi"><div class="label">Total Food Cost</div><div class="value" id="fin-total-val">--</div><div class="delta" id="fin-total-delta">May 2026 — V104 + V110</div></div>
-<div class="kpi"><div class="label">V104 - ATL to LHR</div><div class="value" id="fin-v104-val">--</div><div class="delta" id="fin-v104-delta">10 departures</div></div>
-<div class="kpi"><div class="label">V110 - ATL to MAN</div><div class="value" id="fin-v110-val">--</div><div class="delta" id="fin-v110-delta">10 departures</div></div>
-<div class="kpi"><div class="label">Avg Cost / Mission</div><div class="value" id="fin-avg-mission-val" style="color:#34d399;">--</div><div class="delta" id="fin-avg-mission-delta">56 matched missions</div></div>
-<div class="kpi"><div class="label">Avg Cost / Flight</div><div class="value" id="fin-avg-flight-val" style="color:#60a5fa;">--</div><div class="delta" id="fin-avg-flight-delta">-- flights</div></div>
+<div class="kpi"><div class="label">Total Food Cost</div><div class="value" id="fin-total-val">$141,067.51</div><div class="delta" id="fin-total-delta">May 2026 — V104 + V110</div></div>
+<div class="kpi"><div class="label">V104 - ATL to LHR</div><div class="value" id="fin-v104-val">$80,252.47</div><div class="delta" id="fin-v104-delta">10 departures</div></div>
+<div class="kpi"><div class="label">V110 - ATL to MAN</div><div class="value" id="fin-v110-val">$60,815.04</div><div class="delta" id="fin-v110-delta">10 departures</div></div>
+<div class="kpi"><div class="label">Avg Cost / Mission</div><div class="value" id="fin-avg-mission-val" style="color:#34d399;">$2,519.06</div><div class="delta" id="fin-avg-mission-delta">56 matched missions</div></div>
+<div class="kpi"><div class="label">Avg Cost / Flight</div><div class="value" id="fin-avg-flight-val" style="color:#60a5fa;">$7,053.38</div><div class="delta" id="fin-avg-flight-delta">20 flights — May 2026</div></div>
 </div>
   </div>
   
   <div id="vs-data">
-<div class="section-title" id="vs-section-title">Daily Food Cost &mdash; May 2026</div>
-  <div class="card"><h3>Food Cost by Flight (USD)</h3><div class="chart-wrap"><canvas id="vs-chart"></canvas></div></div>
-  <div class="section-title">Cost Breakdown &mdash; All 20 Flights</div>
+<div class="section-title" id="vs-section-title">Daily Food Cost — May 2026</div>
+  <div class="card"><h3>Food Cost by Flight (USD)</h3><div class="chart-wrap"><canvas id="vs-chart" height="0" style="display: block; box-sizing: border-box; height: 0px; width: 0px;" width="0"></canvas></div></div>
+  <div class="section-title">Cost Breakdown — All 20 Flights</div>
   
   <div class="tbl-wrap"><table>
     <thead><tr><th>Date</th><th>Flight</th><th>Airline</th><th>Route</th><th>Team Lead(s)</th><th class="r">Food Cost</th></tr></thead>
-    <tbody id="vs-tbody"></tbody>
-    <tfoot><tr><td colspan="5">Total</td><td class="r" id="vs-ft"></td></tr></tfoot>
+    <tbody id="vs-tbody"><tr><td>May 1, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Bobbie Jackson III</span><span class="chip">Gabriel Silva Mane</span></div></td><td class="r green">$8,549.55</td></tr><tr><td>May 1, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Maurice Smith</span><span class="chip">Christian Lawson</span></div></td><td class="r green">$6,097.81</td></tr><tr><td>May 2, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Abubakarr Sessay</span><span class="chip">Christian Lawson</span></div></td><td class="r green">$7,696.54</td></tr><tr><td>May 2, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Bobbie Jackson III</span><span class="chip">Maurice Smith</span></div></td><td class="r green">$5,747.35</td></tr><tr><td>May 3, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Bobbie Jackson III</span><span class="chip">Claudette St. Juste</span></div></td><td class="r green">$8,390.95</td></tr><tr><td>May 3, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Gabriel Silva Mane</span></div></td><td class="r green">$6,279.28</td></tr><tr><td>May 4, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Claudette St. Juste</span><span class="chip">Abubakarr Sessay</span></div></td><td class="r green">$8,300.94</td></tr><tr><td>May 4, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Bobbie Jackson III</span><span class="chip">Issa Camara</span></div></td><td class="r green">$6,396.47</td></tr><tr><td>May 5, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Claudette St. Juste</span><span class="chip">Abubakarr Sessay</span></div></td><td class="r green">$7,652.39</td></tr><tr><td>May 5, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Christian Lawson</span></div></td><td class="r green">$6,132.13</td></tr><tr><td>May 6, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Christian Lawson</span><span class="chip">Tecari Brown</span></div></td><td class="r green">$7,356.35</td></tr><tr><td>May 6, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Claudette St. Juste</span><span class="chip">Abdou Diakhate</span></div></td><td class="r green">$5,658.77</td></tr><tr><td>May 7, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Christian Lawson</span><span class="chip">Abdou Diakhate</span></div></td><td class="r green">$7,721.96</td></tr><tr><td>May 7, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Bobbie Jackson III</span><span class="chip">Abdou Diakhate</span></div></td><td class="r green">$5,991.99</td></tr><tr><td>May 8, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Gabriel Silva Mane</span><span class="chip">Maurice Smith</span></div></td><td class="r green">$8,131.25</td></tr><tr><td>May 8, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Christian Lawson</span><span class="chip">Bobbie Jackson III</span></div></td><td class="r green">$6,033.51</td></tr><tr><td>May 9, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Maurice Smith</span><span class="chip">Gabriel Silva Mane</span></div></td><td class="r green">$8,219.44</td></tr><tr><td>May 9, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Christian Lawson</span><span class="chip">Bobbie Jackson III</span></div></td><td class="r green">$6,430.59</td></tr><tr><td>May 10, 2026</td><td><span class="badge ">V104</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-LHR</td><td><div class="leads"><span class="chip">Gabriel Silva Mane</span><span class="chip">Rachel Lester</span></div></td><td class="r green">$8,233.10</td></tr><tr><td>May 10, 2026</td><td><span class="badge v110">V110</span></td><td><span style="background:rgba(196,30,58,0.12);color:#fca5a5;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;">Virgin Atlantic</span></td><td class="dim">ATL-MAN</td><td><div class="leads"><span class="chip">Claudette St. Juste</span><span class="chip">Maurice Smith</span></div></td><td class="r green">$6,047.14</td></tr></tbody>
+    <tfoot><tr><td colspan="5">Total</td><td class="r" id="vs-ft">$141,067.51</td></tr></tfoot>
   </table></div>
 </div>
   
@@ -2066,7 +2037,7 @@ window.switchAirline=function(code){
 
 <div class="panel" id="panel-aa">
   <div class="empty-state">
-    <div class="icon">&#9992;</div>
+    <div class="icon">✈</div>
     <div class="msg">No data uploaded for American Airlines</div>
     <div class="sub">Data expected Q3 2026 · upload an AA supplier invoice to populate this section</div>
   </div>
@@ -2075,7 +2046,7 @@ window.switchAirline=function(code){
 <!-- Ethiopian Airlines Panel -->
 <div class="panel" id="panel-et">
   <div class="empty-state">
-    <div class="icon">&#9992;</div>
+    <div class="icon">✈</div>
     <div class="msg">No data uploaded for Ethiopian Airlines</div>
     <div class="sub">Data expected Q3 2026 · upload an ET supplier invoice to populate this section</div>
   </div>
@@ -2084,7 +2055,7 @@ window.switchAirline=function(code){
 <!-- SAS Panel -->
 <div class="panel" id="panel-sk">
   <div class="empty-state">
-    <div class="icon">&#9992;</div>
+    <div class="icon">✈</div>
     <div class="msg">No data uploaded for SAS Scandinavian Airlines</div>
     <div class="sub">Data expected Q3 2026 · upload an SK supplier invoice to populate this section</div>
   </div>
@@ -2153,36 +2124,4 @@ renderVSForMonth(vsMonths[vsMonths.length-1]);
 </script>
 </div>
 </div>
-
-<!-- American Airlines Panel -->
-<div class="panel" id="panel-aa">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for American Airlines</div>
-    <div class="sub">Upload an AA supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-<!-- Ethiopian Airlines Panel -->
-<div class="panel" id="panel-et">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for Ethiopian Airlines</div>
-    <div class="sub">Upload an ET supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-<!-- SAS Panel -->
-<div class="panel" id="panel-sk">
-  <div class="empty-state">
-    <div class="icon">&#9992;</div>
-    <div class="msg">No data uploaded for SAS Scandinavian Airlines</div>
-    <div class="sub">Upload an SK supplier invoice Excel sheet to populate this section</div>
-  </div>
-</div>
-
-
-</div>
-</div>
-
 </body></html>
