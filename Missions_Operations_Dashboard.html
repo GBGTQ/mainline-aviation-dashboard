@@ -565,7 +565,7 @@ body.wall .wall-banner .pulse {
 </div>
 
 <nav class="tabs">
-  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab active" data-tab="overview" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';var w=document.querySelector('.wrap');if(w)w.style.paddingBottom='';">Overview</button>
   <button class="tab" data-tab="leads" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';var w=document.querySelector('.wrap');if(w)w.style.paddingBottom='';">Team Leads <span class="count" id="leadCount"></span></button>
   <button class="tab" data-tab="timeline" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';var w=document.querySelector('.wrap');if(w)w.style.paddingBottom='';">Timeline</button>
   <button class="tab" data-tab="missions" onclick="var f=document.querySelector('.wrap .filters');if(f)f.style.display='';var w=document.querySelector('.wrap');if(w)w.style.paddingBottom='';">Missions <span class="count" id="missionCount"></span></button>
